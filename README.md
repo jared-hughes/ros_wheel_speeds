@@ -5,4 +5,6 @@ Depends on [wiringPi](http://wiringpi.com/) to build
 
 Publishes a message containing individual wheel speeds as well as Unicycle Model linear and angular velocities
 
+Also publishes odometry information based on http://wiki.ros.org/navigation/Tutorials/RobotSetup/Odom
+
 Written to work with ROS Kinetic, no idea if it works with other versions
