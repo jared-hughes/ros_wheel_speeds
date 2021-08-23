@@ -14,9 +14,9 @@ int main(int argc, char *argv[])
     int leftPinB = 22;
     int rightPinA = 17;
     int rightPinB = 18;
-    int ticksPerRevolution = 2015;
-    int wheelDiameterMm = 152;
-    int wheelAxisMm = 410;
+    int ticksPerRevolution = 1031;
+    int wheelDiameterMm = 120;
+    int wheelAxisMm = 435;
 
     ros::init(argc, argv, "robot_wheel_speeds");
     SystemGPIO gpio({leftPinA, leftPinB, rightPinA, rightPinB});
@@ -61,9 +61,9 @@ int main(int argc, char *argv[])
 
         // Compute odometry
         double dt = (current_time - last_time).toSec();
-        double vx = msg.linear.x;
+        double vx = msg.velocity.linear.x;
         double vy = 0; // No strafing
-        double vth = msg.angular.z;
+        double vth = msg.velocity.angular.z;
         double delta_x = (vx * cos(th) - vy * sin(th)) * dt;
         double delta_y = (vx * sin(th) + vy * cos(th)) * dt;
         double delta_th = vth * dt;
