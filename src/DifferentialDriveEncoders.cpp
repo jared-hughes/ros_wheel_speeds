@@ -1,18 +1,17 @@
 #include "robot_wheel_speeds/DifferentialDriveEncoders.h"
 
 DifferentialDriveEncoders::DifferentialDriveEncoders(
-        int leftPinA,
-        int leftPinB,
-        int rightPinA,
-        int rightPinB,
-        int ticksPerRevolution,
-        int wheelDiameterMm,
-        int wheelAxisMm,
-        const ros::Duration& velocityUpdateInterval
-    )
+    int leftPinA,
+    int leftPinB,
+    int rightPinA,
+    int rightPinB,
+    int ticksPerRevolution,
+    int wheelDiameterMm,
+    int wheelAxisMm,
+    const ros::Duration &velocityUpdateInterval)
     : m_leftWheel(leftPinA, leftPinB, ticksPerRevolution, wheelDiameterMm, velocityUpdateInterval),
       m_rightWheel(rightPinA, rightPinB, ticksPerRevolution, wheelDiameterMm, velocityUpdateInterval),
-      m_wheelAxis(float(wheelAxisMm)/1000),
+      m_wheelAxis(float(wheelAxisMm) / 1000),
       m_keepThreadAlive(false)
 {
 }
@@ -30,7 +29,7 @@ void DifferentialDriveEncoders::Start()
         [this]()
         {
             ROS_INFO("Starting polling thread");
-            while(m_keepThreadAlive)
+            while (m_keepThreadAlive)
             {
                 std::lock_guard<std::mutex> lock(m_mutex);
 
@@ -41,7 +40,6 @@ void DifferentialDriveEncoders::Start()
         });
 }
 
-
 robot_wheel_speeds::WheelVelocities DifferentialDriveEncoders::GetVelocities() const
 {
     std::lock_guard<std::mutex> lock(m_mutex);
@@ -51,7 +49,7 @@ robot_wheel_speeds::WheelVelocities DifferentialDriveEncoders::GetVelocities() c
     msg.header.stamp = m_timeNow;
 
     msg.left = m_leftWheel.GetVelocity();
-    msg.right = m_rightWheel.GetVelocity();
+    msg.right = -m_rightWheel.GetVelocity();
     msg.velocity = calculateUnicycleVelocites(msg.left, msg.right);
 
     ROS_DEBUG("GetVelocities { left:%f, right:%f, lin: %f, ang:%f }",
@@ -64,7 +62,7 @@ geometry_msgs::Twist DifferentialDriveEncoders::calculateUnicycleVelocites(float
 {
     geometry_msgs::Twist velocities;
     velocities.linear.x = 0.5 * (left + right);
-    velocities.angular.z = (right - left)/m_wheelAxis;
+    velocities.angular.z = (right - left) / m_wheelAxis;
 
     return velocities;
 }

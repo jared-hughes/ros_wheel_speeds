@@ -10,13 +10,13 @@ int main(int argc, char *argv[])
     // Config
     int velocityUpdateIntervalNs = 2e7;
     ros::Duration velocityUpdateInterval(0, velocityUpdateIntervalNs);
-    int leftPinA = 17;
-    int leftPinB = 18;
-    int rightPinA = 23;
-    int rightPinB = 22;
-    int ticksPerRevolution = 300;
-    int wheelDiameterMm = 60;
-    int wheelAxisMm = 70;
+    int leftPinA = 23;
+    int leftPinB = 22;
+    int rightPinA = 17;
+    int rightPinB = 18;
+    int ticksPerRevolution = 2015;
+    int wheelDiameterMm = 152;
+    int wheelAxisMm = 410;
 
     ros::init(argc, argv, "robot_wheel_speeds");
     SystemGPIO gpio({leftPinA, leftPinB, rightPinA, rightPinB});
